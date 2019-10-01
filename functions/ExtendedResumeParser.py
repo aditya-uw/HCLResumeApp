@@ -11,10 +11,7 @@ import yaml
 import boto3
 import json
 from ast import literal_eval
-from nltk.tag.stanford import StanfordNERTagger
 
-stanford_base = 'stanford-corenlp-full-2016-10-31/'
-stner = StanfordNERTagger(stanford_base + 'classifiers/english.muc.7class.distsim.crf.ser.gz', stanford_base + 'stanford-ner-3.9.2.jar')
 CONFS = None
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
@@ -23,6 +20,7 @@ AVAILABLE_EXTENSIONS = {'.csv', '.doc', '.docx', '.eml', '.epub', '.gif', '.htm'
                         '.log', '.mp3', '.msg', '.odt', '.ogg', '.pdf', '.png', '.pptx', '.ps', '.psv', '.rtf', '.tff',
                         '.tif', '.tiff', '.tsv', '.txt', '.wav', '.xls', '.xlsx'}
 LAMBDA_TASK_ROOT = os.environ.get('LAMBDA_TASK_ROOT', os.path.dirname(os.path.abspath(__file__)))
+DYNAMODB_TABLE = os.environ.get('DYNAMO_DB_TABLE',"resumewordcloudTable")
 
 class ExtraHeader:
     a = "test"
@@ -36,7 +34,7 @@ def lambda_handler(event, context):
     :rtype: None
     """
     dynamodb = boto3.resource('dynamodb')
-    table = dynamodb.Table('resumewordcloudTable')
+    table = dynamodb.Table(DYNAMODB_TABLE)
     key = event['Records'][0]['Sns']['Message'];
     response = table.get_item(Key={'name': key})
     item = response['Item']
@@ -56,7 +54,7 @@ def lambda_handler(event, context):
 def extract(key, text):
     # Reference variables
     #candidate_file_agg = list()
-    canName, totalstr, bolds, italics = extract_ids(text)
+    canName, totalstr = extract_ids(text)
     keys = extract_keys(totalstr)
     # Convert list to a pandas DataFrame
     header.file_path = key
@@ -67,8 +65,8 @@ def extract(key, text):
     header.email = extract_email(header.text)
     header.phone = extract_phone(header.text)
     header.years_of_experience = extract_years_of_experience(header.text)
-    header.bolded = bolds
-    header.italics = italics
+    # header.bolded = bolds
+    # header.italics = italics
     header.work_info = extract_work_info(keys, header.text)
     header.university_info = extract_university_info(header.text)
     header.awards_achievements_accomplishments = extract_awards(header.text)
@@ -131,18 +129,15 @@ def extract_ids(text):
             else:
                 totalstr += remove_start_tab(line)
         lineNum = lineNum + 1
-    boldContent = boldItalicsContent[:boldItalicsContent.index('\']')+2]
-    italicsContent = boldItalicsContent.replace(boldContent, '')
-    bolds = extract_bolds(boldContent)
-    italics = extract_italics(italicsContent)
+    # boldContent = boldItalicsContent[:boldItalicsContent.index('\']')+2]
+    # italicsContent = boldItalicsContent.replace(boldContent, '')
+    # bolds = extract_bolds(boldContent)
+    # italics = extract_italics(italicsContent)
     totalstr = totalstr.replace('    ', ' ')
     totalstr = totalstr.replace('   ', ' ')
     totalstr = totalstr.replace('  ', ' ')
-    tagged_text = stner.tag(totalstr.split())
-    canName = extract_name(tagged_text)
-    if canName == '':
-        canName = backupCanName
-    return canName, totalstr, bolds, italics
+    canName = backupCanName
+    return canName, totalstr
 
 def extract_bolds(boldContent):
     bolds = []
@@ -183,13 +178,6 @@ def remove_start_tab(line):
     else:
         return line
 
-def extract_name(text):
-    names = text[:2]
-    canName = ''
-    for token, tag in names:
-        if tag == 'PERSON':
-            canName = canName + ' ' + token
-    return canName
 
 def extract_backup_name(line):
     if '\t' in line:
@@ -206,8 +194,8 @@ def clean_up(key, text, info, years):
         info = extract_around_key(text, key)
         #print("DISORGANIZED INFORMATION:", info)   
     info = remove_unnecessary(info)
-    info = remove_string('\x9f', info)
-    info = remove_string('\uf0a7', info)
+    #info = remove_string('\x9f', info)
+    #info = remove_string('\uf0a7', info)
     return info
 
 def remove_unnecessary(info):
@@ -372,3 +360,4 @@ def load_confs(confs_path=LAMBDA_TASK_ROOT + '/config.yaml'):
 
 def get_conf(conf_name):
     return load_confs()[conf_name]
+    
