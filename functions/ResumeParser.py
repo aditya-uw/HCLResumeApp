@@ -28,8 +28,8 @@ from urllib.parse import unquote_plus
 from utils import get_subprocess_output
 
 LAMBDA_TASK_ROOT = os.environ.get('LAMBDA_TASK_ROOT', os.path.dirname(os.path.abspath(__file__)))
-DYNAMODB_TABLE = os.environ.get('DYNAMO_DB_TABLE',"resumewordcloudTable")
-SNS_TOPIC = os.environ.get('SNS_TOPIC',"arn:aws:sns:us-east-1:411797132158:dynamodb")
+DYNAMODB_TABLE = os.environ.get('DYNAMO_DB_TABLE',"resume-metadata-prod")
+SNS_TOPIC = os.environ.get('SNS_TOPIC',"arn:aws:sns:us-west-2:612202678765:ResumeParserSNS")
 BIN_DIR = os.path.join("/opt", 'bin')
 LIB_DIR = os.path.join("/opt", 'lib')
 
