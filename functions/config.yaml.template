@@ -1,0 +1,184 @@
+resume_directory: ../data/input/example_resumes
+summary_output_directory: ../data/output
+data_schema_dir: ../data/schema
+
+extractors:
+ experience:
+  - [Teacher, teaching, tutor]
+  - [developer, software developer, software engineer, dev]
+  - trader
+  - [project manager, general manager, team leader]
+
+ platforms:
+  - Linux
+  - Windows
+  - [Mac, MacOS]
+
+ database:
+  - SQL
+  - MySQL
+  - [Postgress, Postgresql]
+  - Oracle
+
+ programming:
+  - [java, JavaEE]
+  - ' C '
+  - C++
+  - C#
+  - .NET
+  - Matlab
+  - ' R '
+  - python
+  - VHDL
+  - PHP
+  - JavaScript
+  - Angular
+  - ReactJS
+  - JQuery
+  - MS SQL Server
+  - MySQL
+  - Postgres
+  - Bigdata
+  - Hadoop
+  - Hive
+  - Hbase
+  - Spark
+  - Scala
+  - Bootstrap
+  - Agile
+  - Scrum
+  - Project Management
+  - Jenkins
+  - Maven
+  - ' Git '
+  - Jira
+  - JUNIT
+  - NUNIT
+  - KARMA
+  - Jasmine
+  - Cactus
+  - Redux
+  - Jest
+  - Enzyme
+  - Webpack
+  - Babal
+  - Spring Boot
+  - Spring MVC
+  - buildpacks
+  - Pivotal
+  - PCF
+  - Openstack
+  - Azure
+  - Azure App Services
+  - Azure Functions
+  - AWS Lambda
+  - ' AWS '
+  - Mobile App Services
+  - React Native
+  - Xamarin
+
+ machinelearning:
+  - [sklearn, scikit-learn, sk-learn]
+  - [tensorflow, tf, tensor-flow]
+  - keras
+  - h20
+
+ companies:
+  - Irevna Research Services
+  - Lochan & Co
+  - P. K, Narula
+  - NIIT 
+  - Ghosh Khanna 
+  - C C Chokshi
+  - Shapoorji Paloonji 
+  - The Home Depot
+  - Capital One
+  - Bank of America
+  
+ Big companies:
+  - Amazon
+  - Google
+  - Microsoft
+  - Boeing
+  - Lockheed Martin
+  - Oracle
+  - IBM
+  - Apple
+  - Facebook
+  - Disney
+  - Starbucks
+  
+ Big universities:
+  - [University of Amsterdam, UvA]
+  - [Massachusetts Institute of Technology, ' MIT ']
+  - [University of San Francisco, ' USF ']
+  - [Harvard, Harvard University, Harvard Law School]
+  - [Stanford, Stanford University]
+  - [Yale, Yale University]
+  - [Princeton, Princeton University]
+  - [Caltech, California Institute of Technology]
+  - [UPenn, University of Pennsylvania]
+  - [Brown, Brown University]
+  - [Dartmouth, Dartmouth College]
+  - [Duke, Duke University]
+  - ['University of California, Berkeley', UC Berkeley]
+  - ['University of California, Los Angeles', UC Los Angeles, UCLA]
+  - ['University of California, San Diego', UC San Diego, UCSD]
+  - ['University of California, Santa Barbara', UC Santa Barbara, UCSB]
+  - ['University of California, Santa Cruz', UC Santa Cruz, UCSC]
+  
+ Bachelor:
+  - ['Bachelor of Science', 'BS,', ' BS ']
+  - ['Bachelor of Business Administration', 'BBA,', ' BBA ']
+  - ['Bachelor of Commerce', 'B.Comm,', ' B.Comm ', ' B.Com. ', 'B.Com,']
+  - ['Bachelor of Arts', 'BA,', ' BA ']
+  - ['Bachelor of Law', 'LLB,', ' LLB ']
+  
+ Masters:
+  - ['Master of Arts', ' MA,', ' MA ']
+  - ['Master of Science', 'MS,', ' MS ']
+  - ['Master of Business Administration', ' MBA,', ' M.B.A. ']
+  - ['Master of Fine Arts', ' MFA,', ' MFA ']
+  - ['Masters in Business Finance', ' MBF,', ' MBF']
+  
+ Doctorate:
+  - ['Doctor of Philosophy', ' PhD,', ' PhD ']
+  - ['Juris Doctor', ' JD,', ' J.D. ']
+  - ['Doctor of Medicine']
+  - ['Doctor of Dental Surgery', ' DDS,', ' D.D.S. ']
+
+ languages:
+  - Dutch
+  - English
+  - German
+  - Spanish
+  - French
+  - [Chinese, Mandarin, Cantonese]
+  - Hindi
+  - Japanese
+  - Korean
+  - Tamil
+  - Telegu
+  - Russian
+  - Arabic
+  - African
+  
+ hobbies:
+  - [swimming, swim]
+  - [soccer, football]
+  - painting
+  - reading
+  - Film and digital photography
+  - physics
+  - research
+  - video games
+  - solving problems
+  - fixing things
+
+ open-source:
+  - github
+  - bitbucket
+  - gitlab
+  - sourceforge
+  - gitkraken
+
