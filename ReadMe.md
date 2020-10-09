@@ -1,2 +1,1 @@
-The application was built to review and rank job candidate resumes improving the productivity of the company’s HR department in ranking the resumes by skill and experience. It involved the latest in Python, Data Science, Natural Language Processing, Responsive Professional Grade Web UI, AWS DynamoDb to store data, AWS S3 to store Images and Documents and ran on the Amazon Cloud and to be able to scale to thousands of users.
-Project Architecture Slides: https://drive.google.com/file/d/0ByAkVdWyr2BCMDh6MDFra3RXLUtNcUhxREVJYjl4UkNnOUNV/view?usp=sharing
+Mostly Python Code that runs on Anaconda prompt with command "python "
