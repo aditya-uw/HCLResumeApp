@@ -4,7 +4,7 @@ data_schema_dir: ../data/schema
 
 extractors:
  experience:
-  - [Teacher, teaching, tutor]
+  - [Teacher, teaching, tutor, mentor]
   - [developer, software developer, software engineer, dev]
   - trader
   - [project manager, general manager, team leader]
