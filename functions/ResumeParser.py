@@ -43,7 +43,7 @@ def _get_subprocess_output(*args, **kwargs):
     return get_subprocess_output(*args, **kwargs)
 
 
-# Worked on pdf to text converter to analyze files
+# Worked on pdf to text converter to analyze files and extract info
 def pdf_to_text(document_path, event, context):
     print("insidepdf")
     pagenums = set()
@@ -93,7 +93,7 @@ def doc_to_text(document_path, event, context):
     return text
 
 
-# Worked on docx to text converter to analyze files
+# Worked on docx to text converter to analyze files and extract info
 def docx_to_text(document_path, event, context):
     global logger
     print("before import")
@@ -145,7 +145,7 @@ def docx_to_text(document_path, event, context):
 
     return text
 
-
+ 
 # Did not work on this, converts image to text for extracting information
 def img_to_text(document_path, event, context):
     os.environ['TESSDATA_PREFIX'] = "/opt/data/tessdata"
