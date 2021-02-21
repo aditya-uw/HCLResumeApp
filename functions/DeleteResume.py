@@ -1,6 +1,7 @@
 import json
 import boto3
 
+# Sends a message to AWS server to delete a resume from S3 database
 def lambda_handler(event, context):
     # TODO implement
     print(event)
