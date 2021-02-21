@@ -39,16 +39,11 @@ with NamedTemporaryFile(mode='w', delete=False) as f:
     f.write('map_path = {}\n'.format(os.path.join(LIB_DIR, 'catdoc', 'charsets')))
 
 
-# end with
-
-
 def _get_subprocess_output(*args, **kwargs):
     return get_subprocess_output(*args, **kwargs)
 
 
-# end def
-
-
+# Worked on pdf to text converter to analyze files
 def pdf_to_text(document_path, event, context):
     print("insidepdf")
     pagenums = set()
@@ -67,9 +62,7 @@ def pdf_to_text(document_path, event, context):
     return text
 
 
-# end def
-
-
+# Worked on doc to text converter to analyze files
 def doc_to_text(document_path, event, context):
     global logger
     cmdline = [os.path.join(BIN_DIR, 'antiword'), '-t', '-w', '0', '-m', 'UTF-8', document_path]
@@ -100,9 +93,7 @@ def doc_to_text(document_path, event, context):
     return text
 
 
-# end def
-
-
+# Worked on docx to text converter to analyze files
 def docx_to_text(document_path, event, context):
     global logger
     print("before import")
@@ -155,14 +146,14 @@ def docx_to_text(document_path, event, context):
     return text
 
 
-# end def
-
+# Did not work on this, converts image to text for extracting information
 def img_to_text(document_path, event, context):
     os.environ['TESSDATA_PREFIX'] = "/opt/data/tessdata"
     text = pytesseract.image_to_string(Image.open(document_path), config='--psm 6')
     return text
 
 
+# Did not work on this, converts files in rich text format to text for extracting information
 def rtf_to_text(document_path, event, context):
     cmdline = [os.path.join(BIN_DIR, 'unrtf'), '-P', os.path.join(LIB_DIR, 'unrtf'), '--text', document_path]
     text = _get_subprocess_output(cmdline, shell=False)
@@ -184,8 +175,7 @@ def rtf_to_text(document_path, event, context):
     return text
 
 
-# end def
-
+# Did not work on this, converts files in JDownloader to text for extracting information
 def jd_to_text(document_path, event, context):
     print("jd to text")
     return open(document_path).read().replace('\n','')
@@ -205,12 +195,14 @@ PARSE_FUNCS = {
 }
 
 
+# Worked on extracting email information from text using RegEx
 def extractEmail(text):
     EMAIL_REGEX = r"[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)"
     emails = re.findall(EMAIL_REGEX, text)
     return ' , '.join(emails)
 
 
+# Worked on extracting phone number information from text using RegEx
 def extractPhoneNumber(text):
     PHONE_REGEX = r"\(?(\d{3})?\)?[\s\.-]{0,2}?(\d{3})[\s\.-]{0,2}(\d{4})"
     phones = re.findall(PHONE_REGEX, text)
@@ -221,6 +213,7 @@ def extractPhoneNumber(text):
     return ' / '.join(ph)
 
 
+# Did not work on this, gets the similarity score between the job description and the candidate information
 def getSimilarityScore(table, text, metaTag):
     print("Getting the JD data from DB {0}".format(metaTag))
     try:
@@ -254,6 +247,8 @@ def getSimilarityScore(table, text, metaTag):
         print(e)
         return 0,""
 
+    
+# Triggers SNS message for Amazon web server update
 def triggerSNSMessage(key):
     print("SNS message publishing for topic {0} with message {1}".format(SNS_TOPIC, key))
     try:
@@ -267,6 +262,7 @@ def triggerSNSMessage(key):
         print(e)
         pass
 
+# Worked on printing out the dictionary data between info category and extracted info
 def handle(event, context):
     print("Event Started")
     #global logger
@@ -278,7 +274,6 @@ def handle(event, context):
     #bucket = 'testwc-ruhul'
     key =event['Records'][0]['s3']['object']['key']
     print("key "+ key)
-    #key = 'resume/ruhul_profile.pdf'
     key = unquote_plus(key)
     print("New file : {} uploaded in bucket: {} ".format(key, bucket))
     tmpfile = '/tmp/' + key[7:];
