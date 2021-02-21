@@ -51,6 +51,8 @@ def lambda_handler(event, context):
     
     pass
 
+
+# Extracts all the information that can be extracted and stores as the fields of an object
 def extract(key, text):
     # Reference variables
     #candidate_file_agg = list()
@@ -73,14 +75,18 @@ def extract(key, text):
     # Extract skills
     extract_fields()
 
+
+# Extracts information of candidate awards using regexes and keywords
 def extract_awards(text):
     currentRegex = r"(^.*\W*(?:Awards?|Achievements?|Patents?|awards?|achievements?|patents?)\W*.*$)"
     return term_match(text, currentRegex)
 
+# Extracts information of candidate university using regexes and keywords
 def extract_university_info(text):
     currentRegex = r"(^.*\W*(?:University|university?|college?|College?|Institute?|institute?)\W*.*$)"
     return term_match(text, currentRegex)
     
+# Extracts information of candidate's years of experience using regexes and keywords
 def extract_years_of_experience(text):
     currentRegex = r"(^.*\W*(?:experience|EXPERIENCE?|Experience)\W*.*$)"
     sentences = term_match(text, currentRegex)
@@ -90,16 +96,19 @@ def extract_years_of_experience(text):
     currentRegex = r"([0-9][0-9]\W*years)"
     return term_match(sentence, currentRegex)[0]
 
+# Extracts information of candidate's email using regexes
 def extract_email(text):
     currentRegex = r"[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9]"
     currentRegex += "(?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?"
     currentRegex += "(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)"
     return term_match(text, currentRegex)
 
+# Extracts information of candidate's phone number using regexes
 def extract_phone(text):
     currentRegex = r"(\+?.\d{1,2}[\s.-])?(?:\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}?|\d{5}[\s.-]\d{5})"
     return term_match(text, currentRegex)
-    
+   
+# Extracts information of candidate's specific work experiences using regexes
 def extract_keys(totalstr):
     currentRegex = r"\b^.*(?:Jan(?:uary?|’?|'?)?"
     currentRegex += "|Feb(?:ruary?|’?|'?)?|Mar(?:ch?|’?|'?)?|Apr(?:il?|’?|'?)?"
@@ -115,6 +124,8 @@ def extract_keys(totalstr):
         keys = keys + other_keys
     return keys
 
+# Extracts a secondary name in case regex does nto work from the first line of the text
+# Also cleans up each line of the text to enable cleaner extraction
 def extract_ids(text):
     lineNum = 0
     totalstr = ""
@@ -139,6 +150,7 @@ def extract_ids(text):
     canName = backupCanName
     return canName, totalstr
 
+# Extracts all bolded content in the text
 def extract_bolds(boldContent):
     bolds = []
     for bold in literal_eval(boldContent):
@@ -148,6 +160,7 @@ def extract_bolds(boldContent):
             bolds.append(bold)
     return bolds
 
+# Extracts all italicized content from the text
 def extract_italics(italicsContent):
     italics = []
     for italic in literal_eval(italicsContent):
@@ -157,6 +170,7 @@ def extract_italics(italicsContent):
             italics.append(italic)
     return italics
 
+# Extracts complete work_info and puts it into a set of organized information
 def extract_work_info(keys, totalstr):
     organized_info = []
     for key in keys:
@@ -171,14 +185,15 @@ def extract_work_info(keys, totalstr):
         if work_filter:
             organized_info.append(disorganized_work_dict)
     return organized_info
-            
+       
+# Removes the tab at the start of any line
 def remove_start_tab(line):
     if '\t' in line[0:2]:
         return line[0:2].replace('\t', '') + line[2:]
     else:
         return line
 
-
+# Extracts the words at the start of the line and assumes it as a name
 def extract_backup_name(line):
     if '\t' in line:
         esc_index = line.index('\t')
@@ -189,6 +204,7 @@ def extract_backup_name(line):
     else:
         return line
 
+# Cleans up extracted information based on how it is structured and reorganizes it to match formatting
 def clean_up(key, text, info, years):
     if (info == years) or (info == ''):
         info = extract_around_key(text, key)
@@ -198,6 +214,7 @@ def clean_up(key, text, info, years):
     #info = remove_string('\uf0a7', info)
     return info
 
+# Removes unnecessary spaces and tabs in between words
 def remove_unnecessary(info):
     if '  ' in info[0:int(len(info)/2)]:
         space_position = info[0:int(len(info)/2)].index('  ')
@@ -210,7 +227,8 @@ def remove_unnecessary(info):
         space_sentence = space_sentence.strip()
         info = space_sentence
     return info
-            
+       
+# Extracts the words before and after a specific key to get the information that is relevant to that key
 def extract_around_key(text, key):
     key_position = text.find(key)
     key_sentence = text[key_position - 45:key_position + len(key) + 45]
@@ -218,6 +236,7 @@ def extract_around_key(text, key):
     key_sentence = key_sentence.strip()
     return key_sentence
 
+# Extracts information such as employer and location that is relvant to work experience
 def extract_information(key, years):
     if len(years) > 0:
         key_position = key.find(years.split()[0])
@@ -231,7 +250,8 @@ def extract_information(key, years):
             return key
     else:
         return ''
-    
+
+# Extracts the years of work experience for a candidate using regexes and methods to clean up and organize
 def extract_years(key_string):
     currentRegex = r"\b(?:(?:Jan(?:uary?|’?|'?)?|Feb(?:ruary?|’?|'?)?"
     currentRegex += "|Mar(?:ch?|’?|'?)?|Apr(?:il?|’?|'?)?|May(?:y?|’?|'?)?"
@@ -304,7 +324,8 @@ def term_count(string_to_search, term):
     except Exception:
         logging.error('Error occurred during regex search')
         return 0
-    
+
+# Extract fields and skills of the candidate
 def extract_fields():
     header.extra_fields = {}
     for extractor, items_of_interest in get_conf('extractors').items():
@@ -312,7 +333,7 @@ def extract_fields():
         if (len(extra_skills) != 0):
             header.extra_fields[extractor] = extra_skills
 
-
+# Extract all skills and relevant information depending on the items of interest for the employer
 def extract_skills(resume_text, extractor, items_of_interest):
     potential_skills_dict = dict()
     matched_skills = []
@@ -341,6 +362,8 @@ def extract_skills(resume_text, extractor, items_of_interest):
             matched_skills.append(skill_name)
     return matched_skills
 
+# confs is a file that stores a a bunch of keywords that raises employer attention
+# Such as outstanding university or companies
 def load_confs(confs_path=LAMBDA_TASK_ROOT + '/config.yaml'):
     # TODO Docstring
     global CONFS
